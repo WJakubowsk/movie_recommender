@@ -12,6 +12,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          ls -l
           cd core/
           python -m pip install -r requirements.txt
 

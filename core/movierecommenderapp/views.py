@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-# import imdbpie
+from omdb import OMDBClient
 
-# imdb = imdbpie.Imdb(apikey='k_8j5')
+moviesDB = OMDBClient(apikey="730a97c3")
 
 
 def say_hello(request):
@@ -10,6 +10,11 @@ def say_hello(request):
 
 
 def search(request):
-    # movies = imdb.search_for_title('Matrix')
-    movies = ['Matrix', 'The Matrix', 'The Matrix Reloaded', 'The Matrix Revolutions']
+    movies = ['Matrix', 'The Matrix',
+              'The Matrix Reloaded', 'The Matrix Revolutions']
     return render(request, 'search.html', {'movies': movies})
+
+
+def omdb_search(request):
+    movies = moviesDB.get(search="matrix") # has to be lowercase for some reason
+    return render(request, "omdb_search.html", {"movies": movies})

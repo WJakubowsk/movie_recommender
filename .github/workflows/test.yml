@@ -12,8 +12,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd core/
           python -m pip install -r requirements.txt
 
       - name: Run tests
         run: |
-          python core/manage.py test
+          cd core/
+          python manage.py test

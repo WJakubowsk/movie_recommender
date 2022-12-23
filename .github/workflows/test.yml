@@ -1,32 +1,24 @@
 name: Test Django App
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: Set up Python environment
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-
-      - name: Upload requirements.txt
-        uses: actions/upload-artifact@v2
-        with:
-          name: requirements.txt
-          path: core/requirements.txt
-
-      - name: Download requirements.txt
-        uses: actions/download-artifact@v2
-        with:
-          name: requirements.txt
-          path: core/requirements.txt
+          python-version: 3.9
 
       - name: Install dependencies
         run: |
-          python -m pip install -r requirements.txt
+          cd ./core
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Run tests
         run: |
-          cd core
+          cd ./core
           python manage.py test

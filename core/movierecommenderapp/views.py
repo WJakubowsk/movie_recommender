@@ -15,7 +15,6 @@ def search(request):
     return render(request, 'search.html', {'movies': movies})
 
 
-def omdb_search(request):
-    # has to be lowercase for some reason
-    movies = moviesDB.get(search="matrix")
-    return render(request, "omdb_search.html", {"movies": movies})
+def omdb_search(request, title):
+    movies = moviesDB.get(search=title)
+    return render(request, "omdb_search.html", {"movies": movies ,"title": title})

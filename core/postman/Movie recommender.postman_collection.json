@@ -1,0 +1,23 @@
+{
+	"info": {
+		"_postman_id": "011aa906-69ed-4848-9732-58f0fd67d832",
+		"name": "Movie recommender",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "helloworld req",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local}}hello",
+					"host": [
+						"{{local}}hello"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

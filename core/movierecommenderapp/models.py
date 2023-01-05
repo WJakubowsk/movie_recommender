@@ -6,10 +6,10 @@ class Show(models.Model):
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
-    Poster = models.CharField(max_length=500)
-    Director = models.CharField(max_length=100)
-    Actors = models.CharField(max_length=500)
-    Runtime = models.CharField(max_length=50)
+    poster = models.CharField(max_length=500)
+    director = models.CharField(max_length=100)
+    actors = models.CharField(max_length=500)
+    runtime = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title
@@ -30,5 +30,3 @@ class Rating(models.Model):
 class Watched(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     show = models.ForeignKey(Show, on_delete=models.CASCADE)
-
-#uzytkowanik podaje dane,

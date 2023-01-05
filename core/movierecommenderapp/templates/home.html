@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Home page</title>
-</head>
-<body>
+{% extends "main/base.html" %}
+{% block title %}Home{% endblock title %}
+{% block content %}
     <h1>Home page</h1>
-</body>
-</html>
+    <p>MyMovies is a website where you can find information about movies.</p>
+    Here are some movies:
+    {{ movies }}
+
+    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>
+    <li><a href="{% url 'signup' %}">signup</a></li>
+    <li><a href="{% url 'login' %}">login</a></li>
+{% endblock %}

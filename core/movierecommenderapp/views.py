@@ -31,7 +31,7 @@ def signup(request):
         user = get_user_model().objects.create_user(username=username, email=email, password=password,
                                                     first_name=firstname, last_name=lastname)
         login(request, user)
-        return HttpResponse('Signed up')  # TODO redirect to home
+        return redirect('index')
     else:
         return render(request, 'signUp.html')
 
@@ -43,7 +43,6 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # return HttpResponse('Logged in') # TODO redirect to home
             return redirect('index')
         else:
             return HttpResponse('Invalid username or password')

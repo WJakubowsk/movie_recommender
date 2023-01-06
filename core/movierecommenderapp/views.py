@@ -1,6 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth import login, authenticate, get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, authenticate, get_user_model, logout
 from omdb import OMDBClient
 from .models import Show
 
@@ -16,7 +15,7 @@ def index(request):
     return render(request, 'index.html')
 
 
-def home(request):  # TODO swap with index
+def home(request):
     movies = Show.objects.all()
     return render(request, 'home.html', {'movies': movies})
 
@@ -31,7 +30,7 @@ def signup(request):
         user = get_user_model().objects.create_user(username=username, email=email, password=password,
                                                     first_name=firstname, last_name=lastname)
         login(request, user)
-        return redirect('index')
+        return redirect('home')
     else:
         return render(request, 'signUp.html')
 
@@ -43,16 +42,16 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('home')
         else:
             return HttpResponse('Invalid username or password')
     else:
         return render(request, 'login.html')
 
 
-def logout(request):
+def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('index')
 
 
 def search():

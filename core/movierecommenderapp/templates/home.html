@@ -1,12 +1,20 @@
-{% extends "main/base.html" %}
-{#{% block title %}Home{% endblock title %}#}
+{% extends 'main/base.html' %}
+{% block title %}Welcome Page{% endblock title %}
+
 {% block content %}
-    <h1>Home page</h1>
-    <p>MyMovies is a website where you can find information about movies.</p>
-    Here are some movies:
-    {{ movies }}
+
+    Welcome, {{ request.user.firtname }}!
 
     <li><a href="{% url 'example' 'fight' %}">ex list</a></li>
-    <li><a href="{% url 'signup' %}">signup</a></li>
-    <li><a href="{% url 'login' %}">login</a></li>
+
+    <li><a href="{% url 'info' %}">info</a></li>
+    <li><a href="{% url 'search' %}">search</a></li>
+    <li><a href="{% url 'recommend' %}">recommend</a></li>
+
+    <form method="post" action="{% url 'index' %}">
+      {% csrf_token %}
+      <input type="submit" value="Log out">
+    </form>
+
+
 {% endblock %}

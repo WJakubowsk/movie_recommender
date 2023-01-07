@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+{% block title %}Sing-Up{% endblock %}
+
+
+{% block content %}
+
+
+    already have an account? <a href="{% url 'login' %}">click here to login</a>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Sign Up</button>
+    </form>
+
+{% endblock %}
+
+
+
+
+

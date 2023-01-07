@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 # Create your models here.
 
 class Show(models.Model):
@@ -17,7 +18,7 @@ class Show(models.Model):
         return self.title
 
 
-class User(AbstractUser): # TODO distinct fields?
+class User(AbstractUser):  # TODO distinct fields?
     username = models.CharField(max_length=100, unique=True)
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
@@ -32,6 +33,7 @@ class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     show = models.ForeignKey(Show, on_delete=models.CASCADE)
     rating = models.IntegerField()
+
 
 # table to connect users and watched shows
 class Watched(models.Model):

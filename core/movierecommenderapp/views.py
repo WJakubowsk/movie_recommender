@@ -28,7 +28,7 @@ def signup(request):
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
         user = get_user_model().objects.create_user(username=username, email=email, password=password,
-                                        first_name=firstname, last_name=lastname)
+                                                    first_name=firstname, last_name=lastname)
         login(request, user)
         return redirect('home')
     else:

@@ -12,12 +12,13 @@ def example(request, title):
 
 
 def index(request):
-    return render(request, 'index.html')
+    movies = Show.objects.all()  # example shows to display
+    movies = list(movies[:10])
+    return render(request, 'index.html', {'movies': movies})
 
 
 def home(request):
-    movies = Show.objects.all()  # for now
-    return render(request, 'home.html', {'movies': movies})
+    return render(request, 'home.html')
 
 
 def signup(request):

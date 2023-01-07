@@ -1,12 +1,14 @@
 {% extends "main/base.html" %}
 {% block title %}Welcome Page{% endblock title %}
 {% block content %}
-    <h1>Start page</h1>
-    <p>MyMovies is a website where you can find information about movies.</p>
-    Here are some movies:
-    {{ movies }}
+    <h2>MyMovies is a website where you can find information about movies.</h2>
 
-    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>
+    Here are some movies example movies:
+    {% for movie in movies %}
+        <p>{{ movie.title }} <img src="{{ movie.poster }}" width="100"></p>
+    {% endfor %}
+
+{#    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>#}
     <li><a href="{% url 'signup' %}">signup</a></li>
     <li><a href="{% url 'login' %}">login</a></li>
 {% endblock %}

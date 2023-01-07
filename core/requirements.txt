@@ -6,6 +6,7 @@ certifi==2022.12.7
 charset-normalizer==2.1.1
 diskcache==2.9.0
 Django==4.1.4
+django-crispy-forms==1.14.0
 idna==3.4
 omdb==0.10.1
 pycodestyle==2.10.0

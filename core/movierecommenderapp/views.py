@@ -16,7 +16,7 @@ def index(request):
 
 
 def home(request):
-    movies = Show.objects.all()
+    movies = Show.objects.all()  # for now
     return render(request, 'home.html', {'movies': movies})
 
 
@@ -54,13 +54,19 @@ def logout_view(request):
     return redirect('index')
 
 
-def search():
+def search(request):
+    # TODO
     return None
 
 
-def recommend():
+def recommend(request):
+    '''
+    TODO: implement with existing trained model, or train a new model based on user's ratings
+    for now just return a list of movies
+    '''
     return None
 
 
-def info():
+def info(request):
+    # TODO
     return None

@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
 # Create your models here.
 
 class Show(models.Model):
@@ -14,12 +16,17 @@ class Show(models.Model):
     def __str__(self):
         return self.title
 
-class User(models.Model): #TODO change to auth.user
-    name = models.CharField(max_length=100)
+
+class User(AbstractUser): # TODO distinct fields?
+    username = models.CharField(max_length=100, unique=True)
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+
     def __str__(self):
-        return self.name
+        return self.first_name
+
 
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

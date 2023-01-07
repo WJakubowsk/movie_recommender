@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from omdb import OMDBClient
-from .models import Show
+from .models import Show, User
 
 omdb_api = OMDBClient(apikey="730a97c3")  # can stay for now
 
@@ -27,8 +27,8 @@ def signup(request):
         password = request.POST['password']
         firstname = request.POST['firstname']
         lastname = request.POST['lastname']
-        user = get_user_model().objects.create_user(username=username, email=email, password=password,
-                                                    first_name=firstname, last_name=lastname)
+        user = User.objects.create_user(username=username, email=email, password=password,
+                                        first_name=firstname, last_name=lastname)
         login(request, user)
         return redirect('home')
     else:

@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+    Welcome, {{ request.user }}!
+
+    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>
+
+    <li><a href="{% url 'info' %}">info</a></li>
+    <li><a href="{% url 'search' %}">search</a></li>
+    <li><a href="{% url 'recommend' %}">recommend</a></li>
+
+    <form method="post" action="{% url 'index' %}">
+      {% csrf_token %}
+      <input type="submit" value="Log out">
+    </form>
+
+
+{% endblock %}

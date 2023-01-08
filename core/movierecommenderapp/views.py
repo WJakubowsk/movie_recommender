@@ -70,4 +70,7 @@ def recommend(request):
 
 def info(request):
     # TODO
-    return None
+    return render(request, 'userInfo.html')
+
+def about(request):
+    return render(request, 'about.html')

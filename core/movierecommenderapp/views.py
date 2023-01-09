@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from omdb import OMDBClient
 from .models import Show
+from django.contrib.auth.decorators import login_required
 
 omdb_api = OMDBClient(apikey="730a97c3")  # can stay for now
 
@@ -69,6 +70,7 @@ def search(request):
                                                    'query': query})
 
 
+@login_required(login_url='login')
 def recommend(request):
     '''
     TODO: implement with existing trained model, or train a new model based on user's ratings
@@ -76,7 +78,7 @@ def recommend(request):
     '''
     return None
 
-
+@login_required(login_url='login')
 def info(request):
     # TODO
     return render(request, 'userInfo.html')

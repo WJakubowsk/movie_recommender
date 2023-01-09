@@ -3,12 +3,9 @@
 {% block content %}
     <h2>MyMovies is a website where you can find information about movies.</h2>
 
-    Here are some movies example movies:
+    Here are some example movies:
     {% for movie in movies %}
         <p>{{ movie.title }} <img src="{{ movie.poster }}" width="100"></p>
     {% endfor %}
 
-{#    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>#}
-    <li><a href="{% url 'signup' %}">signup</a></li>
-    <li><a href="{% url 'login' %}">login</a></li>
 {% endblock %}

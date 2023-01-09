@@ -9,6 +9,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('search/', views.search, name='search'),
     path('recommend/', views.recommend, name='recommend'),
-    path('info', views.info, name='info'),
+    path('info/', views.info, name='info'),
     path('omdb/<str:title>/', views.example, name='example'),
+    path('about/', views.about, name='about'),
 ]

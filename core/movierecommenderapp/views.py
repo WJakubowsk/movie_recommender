@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from omdb import OMDBClient
 from .models import Show
+from django.contrib.auth.decorators import login_required
 
 omdb_api = OMDBClient(apikey="730a97c3")  # can stay for now
 
@@ -12,6 +13,9 @@ def example(request, title):
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     movies = Show.objects.all()  # example shows to display
     movies = list(movies[:10])
     return render(request, 'index.html', {'movies': movies})
@@ -56,10 +60,17 @@ def logout_view(request):
 
 
 def search(request):
-    # TODO
-    return None
+    query = request.GET.get('q')
+    results = Show.objects.filter(title__contains=query)
+    results = list(results)
+    if results == None or len(results) == 0:
+        return render(request, 'home.html', {'error': 'No results found'})
+
+    return render(request, 'search_results.html', {'results': results,
+                                                   'query': query})
 
 
+@login_required(login_url='login')
 def recommend(request):
     '''
     TODO: implement with existing trained model, or train a new model based on user's ratings
@@ -67,7 +78,10 @@ def recommend(request):
     '''
     return None
 
-
+@login_required(login_url='login')
 def info(request):
     # TODO
-    return None
+    return render(request, 'userInfo.html')
+
+def about(request):
+    return render(request, 'about.html')

@@ -1,3 +1,21 @@
+#popup {
+    width: 200px;
+    height: 150px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 10;
+}
+
+#content {
+    background-color: lightgray;
+}
+
 .navbar{
 	border-radius: 0;
 	min-height: 20px;
@@ -23,7 +41,7 @@
   .right {
     float: right;
   }
-  
+
 .container-fluid{
 	margin-top: 10px;
 }

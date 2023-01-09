@@ -36,15 +36,13 @@
               <a href="{% url 'recommend' %}">Recommendations</a>
               </div>
               <div class="right">
-                <!-- TODO - add other view of logged-in user (request.user.is_authenticated) -->
-              {% if not False %}
+              {% if not request.user.is_active %}
                   <a href="{% url 'signup' %}">Sign Up</a>
                   <a href="{% url 'login' %}">Login</a>
-
               {% else %}
-                      <a href="{% url 'logout' %}">
-                          <span aria-hidden="true"></span>&nbsp;Logout
-                      </a>
+                  <a href="{% url 'logout' %}">
+                      <span aria-hidden="true"></span>&nbsp;Logout
+                  </a>
               {% endif %}
               </div>
             </div>

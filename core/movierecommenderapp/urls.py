@@ -11,5 +11,5 @@ urlpatterns = [
     path('recommend/', views.recommend, name='recommend'),
     path('info/', views.info, name='info'),
     path('omdb/<str:title>/', views.example, name='example'),
-    path('about', views.about, name='about'),
+    path('about/', views.about, name='about'),
 ]

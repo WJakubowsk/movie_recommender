@@ -1,0 +1,11 @@
+{% extends 'main/base.html' %}
+{% block title %}Search: {{ query }}{% endblock %}
+{% block content %}
+
+    {{ results }}
+
+  {% for movie in results %}
+    <p>{{ movie.name }}</p>
+  {% endfor %}
+
+{% endblock %}

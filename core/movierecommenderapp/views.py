@@ -12,6 +12,9 @@ def example(request, title):
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     movies = Show.objects.all()  # example shows to display
     movies = list(movies[:10])
     return render(request, 'index.html', {'movies': movies})

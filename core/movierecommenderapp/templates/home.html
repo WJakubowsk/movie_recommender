@@ -5,4 +5,12 @@
 
     Welcome, {{ request.user }}!
 
+    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>
+
+    <form method="GET" action="{% url 'search' %}">
+      <input type="text" name="q" placeholder="Search for a movie">
+      <button type="submit">Search</button>
+    </form>
+
+
 {% endblock %}

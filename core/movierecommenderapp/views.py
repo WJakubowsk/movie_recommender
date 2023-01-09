@@ -56,8 +56,14 @@ def logout_view(request):
 
 
 def search(request):
-    # TODO
-    return None
+    query = request.GET.get('q')
+    results = Show.objects.filter(title__contains=query)
+    results = list(results)
+    if results == None or len(results) == 0:
+        return render(request, 'home.html', {'error': 'No results found'})
+
+    return render(request, 'search_results.html', {'results': results,
+                                                   'query': query})
 
 
 def recommend(request):

@@ -1,3 +1,21 @@
+#popup {
+    width: 200px;
+    height: 150px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 10;
+}
+
+#content {
+    background-color: lightgray;
+}
+
 .navbar{
 	border-radius: 0;
 	min-height: 20px;
@@ -13,37 +31,37 @@
     text-decoration: none;
     font-size: 18px;
   }
-  
+
   .navbar a:hover {
     color: rgb(83, 0, 0);
   }
-  
+
   .navbar .logo {
     font-size: 22px;
     font-weight: bold;
   }
-  
+
   .navbar .menu {
     display: flex;
   }
-  
+
   .navbar .menu .left {
     display: flex;
   }
-  
+
   .navbar .menu .left a {
     margin-right: auto;
   }
-  
+
   .navbar .menu .left a + a {
     margin-left: 20px;
   }
-  
+
   .navbar .menu .right {
     display: flex;
     margin-left: auto;
   }
-  
+
   .navbar .menu .right a {
     margin-left: 20px;
   }
@@ -52,7 +70,7 @@
     margin-left: 20px;
   }
 
-  
+
 .container-fluid{
 	/* margin-top: 18px; */
 }

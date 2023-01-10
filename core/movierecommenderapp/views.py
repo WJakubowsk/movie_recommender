@@ -63,7 +63,7 @@ def logout_view(request):
 
 def save_movie(title):
     if Show.objects.filter(title=title).exists():
-        return Show.objects.get(title=title)[0]
+        return Show.objects.get(title=title)
 
     # search for movies with the given title
     response = requests.get(api_url + '&t=' + title)

@@ -67,7 +67,7 @@ def save_movie(title):
 
     # search for movies with the given title
     response = requests.get(api_url + '&t=' + title)
-    if response.json()['Response'] == 'True':
+    if response.json()['Response'] != 'True':
         raise ValueError('Server error')
     # add to DB
     movie = Show(movie_id=response.json()['imdbID'], title=response.json()['Title'], year=response.json()['Year'],

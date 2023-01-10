@@ -3,8 +3,10 @@ from django.contrib.auth import login, authenticate, get_user_model, logout
 from omdb import OMDBClient
 from .models import Show
 from django.contrib.auth.decorators import login_required
+import requests
 
-omdb_api = OMDBClient(apikey="730a97c3")  # can stay for now
+omdb_api = OMDBClient(apikey="730a97c3")
+api_url = 'http://www.omdbapi.com/?apikey=730a97c3'
 
 
 def example(request, title):
@@ -49,7 +51,7 @@ def login_view(request):
             login(request, user)
             return redirect('home')
         else:
-            return HttpResponse('Invalid username or password')
+            return render(request, 'login.html', {'error': 'Invalid username or password'})
     else:
         return render(request, 'login.html')
 
@@ -59,15 +61,49 @@ def logout_view(request):
     return redirect('index')
 
 
+def save_movie(title):
+    if Show.objects.filter(title=title).exists():
+        return Show.objects.get(title=title)[0]
+
+    # search for movies with the given title
+    response = requests.get(api_url + '&t=' + title)
+    if response.json()['Response'] == 'True':
+        raise ValueError('Server error')
+    # add to DB
+    movie = Show(movie_id=response.json()['imdbID'], title=response.json()['Title'], year=response.json()['Year'],
+                 category=response.json()['Genre'],
+                 poster=response.json()['Poster'], director=response.json()['Director'],
+                 actors=response.json()['Actors'], runtime=response.json()['Runtime'])
+    Show.save(movie)
+    return movie
+
+
+def search_with_api(request):
+    query = request.GET.get('q')
+    movies = list(omdb_api.get(search=query))
+    if movies == None or len(movies) == 0:
+        return render(request, 'home.html', {'error': 'No results found'})
+    return render(request, "api_results.html", {"movies": movies, "query": query})
+
+
 def search(request):
     query = request.GET.get('q')
     results = Show.objects.filter(title__contains=query)
     results = list(results)
     if results == None or len(results) == 0:
+        # search_for_movies(title) # TODO
         return render(request, 'home.html', {'error': 'No results found'})
 
     return render(request, 'search_results.html', {'results': results,
                                                    'query': query})
+
+
+def movie_detail(request, title):
+    try:
+        movie = save_movie(title)
+    except ValueError:
+        return HttpResponse('Server error')
+    return render(request, 'movie_detail.html', {'movie': movie})
 
 
 @login_required(login_url='login')
@@ -78,10 +114,12 @@ def recommend(request):
     '''
     return None
 
+
 @login_required(login_url='login')
 def info(request):
     # TODO
     return render(request, 'userInfo.html')
+
 
 def about(request):
     return render(request, 'about.html')

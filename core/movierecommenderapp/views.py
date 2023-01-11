@@ -73,7 +73,8 @@ def save_movie(title):
     movie = Show(movie_id=response.json()['imdbID'], title=response.json()['Title'], year=response.json()['Year'],
                  category=response.json()['Genre'],
                  poster=response.json()['Poster'], director=response.json()['Director'],
-                 actors=response.json()['Actors'], runtime=response.json()['Runtime'])
+                 actors=response.json()['Actors'], runtime=response.json()['Runtime'],
+                 plot=response.json()['Plot'], box_office=response.json()['BoxOffice'])
     Show.save(movie)
     return movie
 

@@ -33,7 +33,9 @@ class ViewTest(TestCase):
             poster='https://www.test.com',
             director='Test Director',
             actors='Test Actor',
-            runtime='100 min'
+            runtime='100 min',
+            plot='Test Plot',
+            box_office='Test Box Office'
         )
 
         response = self.client.get(reverse('search'), {'q': 'Test Movie'})

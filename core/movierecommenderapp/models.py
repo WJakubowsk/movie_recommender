@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Show(models.Model):
-    movie_id = models.CharField(max_length=50)
+    movie_id = models.CharField(max_length=50, unique=True)
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
@@ -13,6 +13,8 @@ class Show(models.Model):
     director = models.CharField(max_length=100)
     actors = models.CharField(max_length=500)
     runtime = models.CharField(max_length=50)
+    plot = models.CharField(max_length=500)
+    box_office = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title

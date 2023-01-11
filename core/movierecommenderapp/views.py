@@ -70,7 +70,7 @@ def save_movie(title):
     if response.json()['Response'] != 'True':
         raise ValueError('Server error')
     # add to DB
-    movie = Show(movie_id=response.json()['imdbID'], title=response.json()['Title'], year=response.json()['Year'],
+    movie = Show(show_id=response.json()['imdbID'], title=response.json()['Title'], year=response.json()['Year'],
                  category=response.json()['Genre'],
                  poster=response.json()['Poster'], director=response.json()['Director'],
                  actors=response.json()['Actors'], runtime=response.json()['Runtime'],

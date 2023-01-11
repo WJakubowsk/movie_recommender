@@ -22,48 +22,34 @@
         <button onclick="hidePopup()">close</button>
     </div>
 {% endblock error_msg %}
-<div id="content">
-
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="topNavBar">
-
-            <div class="menu">
-              <div class="left">
-              <a href="{% url 'example' 'fight' %}">example list</a>
-              <a href="{% url 'info' %}">Account</a>
-{#              <a href="{% url 'search' %}">Search</a>#}
-              <a href="{% url 'recommend' %}">Recommendations</a>
-              </div>
-              <div class="right">
-              {% if not request.user.is_active %}
-                  <a href="{% url 'signup' %}">Sign Up</a>
-                  <a href="{% url 'login' %}">Login</a>
-              {% else %}
-                  <a href="{% url 'logout' %}">
-                      <span aria-hidden="true"></span>&nbsp;Logout
-                  </a>
-              {% endif %}
-              </div>
-            </div>
-
-        </div>
+  <nav class="navbar">
+    <div class="menu">
+      <div class="left">
+        <a href="/">MyMovies</a>
+        <a href="{% url 'example' 'fight' %}">example list</a>
+        <a href="{% url 'search' %}">Search</a>
+        <a href="{% url 'recommend' %}">Recommendations</a>
+      </div>
+      <div class="right">
+         {% if not request.user.is_active %}
+            <a href="{% url 'signup' %}">Sign Up</a>
+            <a href="{% url 'login' %}">Login</a>
+        {% else %}
+        <a href="{% url 'info' %}">Account</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% endif %}
+      </div>
     </div>
 </nav>
-
+    
     {% block content %}
 
     {% endblock content %}
-
-
-    <nav class="navbar navbar-bottom">
-      <footer class="page-footer font-small">
-          <div class="footer-copyright text-center py-3">© 2022
-          <a href="{% url 'about' %}" style="color:rgb(219, 84, 84)"> About us</a>
-      </div>
-
+    
+    
+      <footer class="page-footer">
+          <a href="{% url 'about' %}"> About us</a>
       </footer>
-      </nav>
 
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

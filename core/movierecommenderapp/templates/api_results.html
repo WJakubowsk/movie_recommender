@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block title %}Search: {{ query }}{% endblock %}
+{% block content %}
+
+<h1>List of movies that matches: {{ query }}</h1>
+
+    {{ movies|length }} movies found.
+
+{% for movie in movies %}
+    <p>{{ movie.title }} at {{ movie.year }}</p>
+    <a href="{% url 'detail' movie.title %}"><img src="{{ movie.poster }}" height=120 alt="Poster for {{ movie.title }}"></a>
+{% endfor %}
+
+{% endblock %}

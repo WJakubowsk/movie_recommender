@@ -33,13 +33,15 @@ class ViewTest(TestCase):
             poster='https://www.test.com',
             director='Test Director',
             actors='Test Actor',
-            runtime='100 min'
+            runtime='100 min',
+            plot='Test Plot',
+            box_office='Test Box Office'
         )
 
         response = self.client.get(reverse('search'), {'q': 'Test Movie'})
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Test Movie')
-        self.assertTemplateUsed(response, 'search_results.html')
+        self.assertTemplateUsed(response, 'api_results.html')
 
         response2 = self.client.get(reverse('search'), {'q': 'Not Existing Movie'})
         self.assertEqual(response2.status_code, 200)

@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+{% block title %}Details: {{ query }}{% endblock %}
+{% block content %}
+
+    <h1>{{ movie }}</h1>
+    <p>{{ movie.category }}</p>
+    <p>{{ movie.year }}</p>
+    <p>{{ movie.director }}</p>
+    <p>{{ movie.actors }}</p>
+    <p>{{ movie.runtime }}</p>
+    <p>{{ movie.box_office }}</p>
+    <p>{{ movie.plot }}</p>
+    <img src="{{ movie.poster }}" alt="Poster for {{ movie.title }}">
+
+{% endblock %}

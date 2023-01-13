@@ -47,3 +47,30 @@ class ViewTest(TestCase):
         self.assertEqual(response2.status_code, 200)
         self.assertNotContains(response2, 'Not Existing Movie')
         self.assertTemplateUsed(response2, 'home.html')
+
+    def test_singup_the_same_user(self):
+        get_user_model().objects.create_user(
+            username='testuser',
+            first_name='test',
+            last_name='user',
+            email='user@test',
+            password='testpassword')
+
+        response = self.client.post(reverse('signup'), {
+            'username': 'testuser',
+            'firstname': 'test',
+            'lastname': 'user',
+            'email': 'user@test',
+            'password': 'testpassword'
+        })
+        self.assertContains(response, 'Username already exists')
+
+    def test_signup(self):
+        response = self.client.post(reverse('signup'), {
+            'username': 'testuser',
+            'firstname': 'test',
+            'lastname': 'user',
+            'email': 'user@test',
+            'password': 'testpassword'
+        })
+        self.assertRedirects(response, reverse('home'))

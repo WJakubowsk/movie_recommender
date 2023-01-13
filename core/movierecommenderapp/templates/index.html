@@ -7,7 +7,10 @@
     <div style="overflow-x: scroll; white-space: nowrap;">
         {% for movie in movies %}
             <div style="display: inline-block;">
-                <p>{{ movie.title }} <img src="{{ movie.poster }}" width="100"></p>
+                <figure style="text-align: center">
+                    <img src="{{ movie.poster }}" width="100">
+                    <figcaption>{{ movie.title }}</figcaption>
+                </figure>
             </div>
         {% endfor %}
     </div>

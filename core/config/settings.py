@@ -74,7 +74,18 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'movie-recommender-sql-db',
+        'HOST': 'tcp:movie-recommender-sql-server.database.windows.net',
+        'USER': 'hubertwiktor',
+        'PASSWORD': 'Password123!@#',
+        'PORT': '1433',
+        'OPTIONS': {
+                'driver': 'ODBC Driver 17 for SQL Server',
+            },
+    },
+    "local": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }

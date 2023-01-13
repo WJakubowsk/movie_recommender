@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Show(models.Model):
-    show_id = models.CharField(max_length=50, unique=True)
+    show = models.CharField(max_length=50, unique=True, null=False)
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
@@ -21,7 +21,7 @@ class Show(models.Model):
 
 
 class User(AbstractUser):
-    user_id = models.AutoField(primary_key=True)
+    user = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100, unique=True)
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
@@ -33,12 +33,12 @@ class User(AbstractUser):
 
 
 class Rating(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    show_id = models.ForeignKey(Show, on_delete=models.CASCADE)
+    user = models.IntegerField(null=False)
+    show = models.CharField(max_length=50, null=False)
     rating = models.IntegerField()
 
 
 # table to connect users and watched shows
 class Watched(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    show_id = models.ForeignKey(Show, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    show = models.ForeignKey(Show, on_delete=models.CASCADE)

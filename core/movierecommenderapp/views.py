@@ -90,6 +90,7 @@ def search_with_api(request):
     return render(request, "api_results.html", {"movies": movies, "query": query})
 
 
+@login_required(login_url='login')
 def search(request):
     query = request.GET.get('q')
     results = Show.objects.filter(title__contains=query)

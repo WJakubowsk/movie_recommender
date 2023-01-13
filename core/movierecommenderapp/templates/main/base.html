@@ -22,7 +22,7 @@
         <button onclick="hidePopup()">close</button>
     </div>
 {% endblock error_msg %}
-  <nav class="navbar">
+  <nav class="navbar blur">
     <div class="menu">
       <div class="left">
         <a href="/">MyMovies</a>
@@ -42,12 +42,14 @@
     </div>
 </nav>
     
-    {% block content %}
+    <div class="blur">
+        {% block content %}
 
-    {% endblock content %}
+        {% endblock content %}
+    </div>
     
     
-      <footer class="page-footer">
+      <footer class="page-footer blur">
           <a href="{% url 'about' %}"> About us</a>
       </footer>
 
@@ -69,11 +71,17 @@
     };
 
     function blur() {
-        document.getElementById("content").style.filter = "blur(5px)";
+        var elements = document.getElementsByClassName("blur");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.filter = "blur(5px)";
+        }
     }
 
     function unblur(){
-        document.getElementById("content").style.filter = "blur(0px)";
+        var elements = document.getElementsByClassName("blur");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.filter = "blur(0px)";
+        }
     }
 
     function showPopup() {

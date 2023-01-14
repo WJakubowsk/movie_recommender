@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -72,25 +73,32 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'movie-recommender-sql-database',
-        'HOST': 'tcp:movie-recommender-sql-server.database.windows.net',
-        'USER': 'hubertwiktor',
-        'PASSWORD': 'Password123!@#',
-        'PORT': '1433',
-        'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',
-            },
-    },
-    "local": {
+password = config('DBPASSWORD', default='')
+if password != "":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mssql',
+            'NAME': 'movie-recommender-sql-database',
+            'HOST': 'tcp:movie-recommender-sql-server.database.windows.net',
+            'USER': 'hubertwiktor',
+            'PASSWORD': password,
+            'PORT': '1433',
+            'OPTIONS': {
+                    'driver': 'ODBC Driver 17 for SQL Server',
+                },
+        },
+        "local": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    DATABASES = {
+    "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

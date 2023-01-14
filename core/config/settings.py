@@ -76,7 +76,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': 'movie-recommender-sql-db',
+        'NAME': 'movie-recommender-sql-database',
         'HOST': 'tcp:movie-recommender-sql-server.database.windows.net',
         'USER': 'hubertwiktor',
         'PASSWORD': 'Password123!@#',

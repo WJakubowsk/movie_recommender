@@ -9,8 +9,8 @@
         {% for movie in user_movies %}
             <div style="display: inline-block;">
                 <figure style="text-align: center">
-                    <img src="{{ movie.poster }}" width="100">
-                    <figcaption>{{ movie.title }}</figcaption>
+                    <a href="{% url 'detail' movie.title %}">
+                        <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width: 200px; height: 300px;">
                 </figure>
             </div>
         {% endfor %}

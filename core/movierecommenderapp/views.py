@@ -109,7 +109,8 @@ def movie_detail(request, title):
         movie = save_movie_toDB(title)
     except ValueError:
         return HttpResponse('Server error')
-    return render(request, 'movie_detail.html', {'movie': movie})
+    is_watched = Watched.objects.filter(user=request.user, show=movie).exists()
+    return render(request, 'movie_detail.html', {'movie': movie, 'is_watched': is_watched})
 
 
 @login_required(login_url='login')
@@ -225,4 +226,13 @@ def save_movie_watched(request):
             return render('list.html', {'error': 'Movie already in list'})
         saved_show = Watched(user=user, show=Show.objects.get(title=show))
         saved_show.save()
+    return redirect('list')
+
+
+@login_required(login_url='login')
+def remove_movie_watched(request):
+    if request.method == 'POST':
+        show = request.POST.get('movie')
+        user = request.user
+        Watched.objects.filter(user=user, show=Show.objects.get(title=show)).delete()
     return redirect('list')

@@ -124,7 +124,8 @@ def recommend(request):
         movie_list = (movie_rating.groupby('show').mean()['rating'] * movie_rating.groupby('show').count()['rating']) \
             .sort_values(ascending=False) \
             .reset_index()['show'] \
-            .head(n_recommendations) \
+            .iloc[:n_recommendations] \
+            .astype(int) \
             .to_list()
     else:
         # create similarity standardized matrix using Pearson's correlation coefficients

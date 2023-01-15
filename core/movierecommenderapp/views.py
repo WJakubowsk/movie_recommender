@@ -115,15 +115,18 @@ def movie_detail(request, title):
 @login_required(login_url='login')
 def recommend(request):
     movie_rating = pd.DataFrame(list(Rating.objects.all().values()))
+    movies = pd.DataFrame(list(Show.objects.all().values()))
     current_user_id = request.user.user
     n_recommendations = 10  # to set dynamically for user
 
     # if new user not rated any movie, we have to recommend him the highest-rated movies
     if current_user_id not in movie_rating.user.unique():
         movie_list = (movie_rating.groupby('show').mean()['rating'] * movie_rating.groupby('show').count()['rating']) \
-            .sort_values(ascending=False) \
-            .reset_index()['show'] \
-            .head(n_recommendations)
+                         .sort_values(ascending=False) \
+                         .reset_index()['show'] \
+                         .iloc[:n_recommendations] \
+            .astype(int) \
+            .to_list()
     else:
         # create similarity standardized matrix using Pearson's correlation coefficients
         user_ratings = movie_rating.pivot_table(index=['user'], columns=['show'], values='rating')
@@ -137,7 +140,7 @@ def recommend(request):
         n = 10  # number of similar users
         # Get top n similar users
         similar_users = user_similarity[user_similarity[current_user_id] > user_similarity_threshold][
-                            current_user_id].sort_values(ascending=False)[:n]
+                            current_user_id].sort_values(ascending=False).iloc[:n]
 
         # pick movies watched by selected user
         current_user_id_watched = user_ratings_norm[user_ratings_norm.index == current_user_id].dropna(axis=1,
@@ -186,9 +189,10 @@ def recommend(request):
         ranked_item_score = item_score.sort_values(by='movie_score', ascending=False)
 
         # get recommendations
-        movie_list = ranked_item_score['movie'][:n_recommendations]
-    context = {'movie_list': movie_list.to_list()}
+        movie_list = ranked_item_score['movie'].iloc[:n_recommendations].astype(int).to_list()
 
+    recommendations = movies.loc[movies['id'].isin(movie_list)].to_dict('records')
+    context = {'movies': recommendations}
     return render(request, 'recommend.html', context)
 
 

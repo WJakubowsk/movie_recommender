@@ -75,3 +75,14 @@ html, body {
 .page-footer > a:hover {
   color: rgb(224, 166, 166);
 }
+
+.authors-container{
+  display: flex;
+}
+
+.author1{
+  flex: 1;
+}
+.author2{
+  flex: 1;
+}

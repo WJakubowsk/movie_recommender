@@ -1,14 +1,35 @@
 {% extends 'main/base.html' %}
-{% block title %}Home{% endblock title %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+{% endblock head %}
 
+{% block title %}Home{% endblock title %}
 {% block content %}
 
-    About project:
+    About project authors:
     <hr>
     <div class="text-center center-block">
     <br/>
-
-        repo can be find <a href="https://github.com/hbujakow/MovieRecommender">here</a>.
+        <div class="authors-container">Authors:</div>
+        <div classs="author1">
+        <div class="name">Hubert Bujakowski</div>
+        Third year student at the Warsaw University of Technology, currently pursuing engineer degree.
+        Zealous about software engineering/development with 2+ years of experience specialising in machine learning, data visualisation, java development, algorithms.
+        <a href="https://www.linkedin.com/in/hubert-bujakowski-690099231/">LinkedIn</a>
+        <a href="https://github.com/hbujakow">GitHub</a>
+        </div>
+        <div class="author2">
+        <div class="name">Wiktor Jakubowski</div>
+        Third year student of Data Science at Faculty of Mathematics and Information Science, Warsaw University of Technology.
+        Passionate about data science and machine learning engineering with 1 year of commercial experience specialising in software engineering, machine learning, data querying and cloud services.
+        
+        <a href="https://www.linkedin.com/in/wiktor-jakubowski/">LinkedIn</a>
+        <a href="https://github.com/WJakubowsk">GitHub</a>
+        </div>
+        <div class="project">
+        Repository of this project can be find <a href="https://github.com/hbujakow/MovieRecommender">here</a>.
+        </div>
     </div>
 
 

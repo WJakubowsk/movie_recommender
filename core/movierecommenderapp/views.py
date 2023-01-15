@@ -115,6 +115,7 @@ def movie_detail(request, title):
 @login_required(login_url='login')
 def recommend(request):
     movie_rating=pd.DataFrame(list(Rating.objects.all().values()))
+    movies = pd.DataFrame(list(Show.objects.all().values()))
     current_user_id = request.user.user
     n_recommendations = 10 # to set dynamically for user
 
@@ -123,7 +124,8 @@ def recommend(request):
         movie_list = (movie_rating.groupby('show').mean()['rating'] * movie_rating.groupby('show').count()['rating']) \
             .sort_values(ascending=False) \
             .reset_index()['show'] \
-            .head(n_recommendations)
+            .head(n_recommendations) \
+            .to_list()
     else:
         # create similarity standardized matrix using Pearson's correlation coefficients
         user_ratings = movie_rating.pivot_table(index=['user'],columns=['show'],values='rating')
@@ -136,7 +138,7 @@ def recommend(request):
         user_similarity_threshold = 0.3
         n = 10 #number of similar users 
         # Get top n similar users
-        similar_users = user_similarity[user_similarity[current_user_id]>user_similarity_threshold][current_user_id].sort_values(ascending=False)[:n] 
+        similar_users = user_similarity[user_similarity[current_user_id]>user_similarity_threshold][current_user_id].sort_values(ascending=False).iloc[:n] 
 
         # pick movies watched by selected user
         current_user_id_watched = user_ratings_norm[user_ratings_norm.index == current_user_id].dropna(axis=1, how='all')
@@ -183,9 +185,10 @@ def recommend(request):
         ranked_item_score = item_score.sort_values(by='movie_score', ascending=False)
 
         # get recommendations
-        movie_list = ranked_item_score['movie'][:n_recommendations]
-    context = {'movie_list': movie_list.to_list()}
+        movie_list = ranked_item_score['movie'].iloc[:n_recommendations].astype(int).to_list()
     
+    recommendations = movies.loc[movies['id'].isin(movie_list)].to_dict('records')
+    context = {'movies': recommendations}
     return render(request, 'recommend.html', context)
 
 

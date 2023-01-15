@@ -11,17 +11,17 @@
 	<div class="container-fluid">
 
     <!-- Movie list -->
-    <div class="row">
-            {% if movie_list %}
-                {% for movie in movie_list %}
-                    <div class="col-sm-2 col-md-2 ">
-                        <div class="thumbnail" style="border-radius: 22px 22px 22px 22px;">
-                            <h4>{{movie.title}}</h4>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        {% for movie in movies %}
+            <div style="display: inline-block;">
+                <figure style="text-align: center">
+                    <img src="{{ movie.poster }}" width="100">
+                    <figcaption>{{ movie.title }}</figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+    </div>
+
 
 </div>
 

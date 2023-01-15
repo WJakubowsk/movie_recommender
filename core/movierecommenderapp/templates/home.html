@@ -3,12 +3,44 @@
 
 {% block content %}
 
-    Welcome, {{ request.user }}!
+    <h2>Welcome, {{ request.user }}!</h2>
 
     <form method="GET" action="{% url 'search' %}">
-      <input type="text" name="q" placeholder="Search for a movie">
-      <button type="submit">Search</button>
+        <input type="text" name="q" placeholder="Search for a movie">
+        <button type="submit">Search</button>
     </form>
+
+    {% if movies %}
+        <h3>Random picks:</h3>
+        <div class="slidecontainer blur">
+            <input type="range" min="1" max="{{ max_range }}" value="{{ max_range }}//3" class="slider" id="myRange">
+            <div id="slider-value">{{ movies|length }}</div>
+        </div>
+        <div style="flex-wrap: wrap">
+            {% for movie in movies %}
+                <div style="display: inline-block;">
+                    <figure style="text-align: center">
+                        <a href="{% url 'detail' movie.title %}"><img src="{{ movie.poster }}" width="200"
+                                                                      alt="Poster for {{ movie.title }}"></a>
+                        <figcaption>{{ movie.title }}</figcaption>
+                    </figure>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <script>
+        const slider = document.getElementById("myRange");
+
+        let value = document.getElementById("slider-value");
+        slider.addEventListener("input", function () {
+            value.innerHTML = this.value;
+            window.location.href = "{% url 'home' %}?rangee=" + this.value;
+        });
+
+
+    </script>
 
 
 {% endblock %}
+

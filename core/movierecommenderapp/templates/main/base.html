@@ -27,6 +27,8 @@
       <div class="left">
         <a href="/">MyMovies</a>
         <a href="{% url 'recommend' %}">Recommendations</a>
+      <a href="{% url 'list' %}">My List</a>
+
       </div>
       <div class="right">
          {% if not request.user.is_active %}

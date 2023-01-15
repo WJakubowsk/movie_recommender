@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block title %}My List{% endblock title %}
+
+{% block content %}
+    <h3>My List</h3>
+
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        {% for movie in user_movies %}
+            <div style="display: inline-block;">
+                <figure style="text-align: center">
+                    <img src="{{ movie.poster }}" width="100">
+                    <figcaption>{{ movie.title }}</figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

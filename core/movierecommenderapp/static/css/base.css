@@ -21,17 +21,15 @@
 	min-height: 20px;
   background-color: rgb(95, 133, 177);
   color: rgb(226, 216, 216);
-  padding: 10px;
-  height: 8%;
   overflow: hidden;
 }
 .navbar a {
     color: rgb(226, 226, 226);
     text-decoration: none;
-    font-size: 18px;
+    font-size: 1.5em;
     float: left;
     text-align: center;
-    padding: 14px 16px;
+    padding: 1em 0.5em;
   }
   
   .navbar a:hover {
@@ -41,6 +39,41 @@
   .right {
     float: right;
   }
+
+  .navbar a::before {
+    content: " | ";
+    margin-right: 0.85em;
+    /* margin-left: 0.85em; */
+  }
+
+  .navbar a:first-child:before {
+    content: "";
+    margin-left: 0em;
+  }
+  
+  @media (max-width: 860px) and (min-width: 550px) {
+    .navbar a {
+      font-size: 1em;
+      padding: 1em 0.6em;
+    }
+    .navbar a::before {
+      content: " | ";
+      margin-right: 0.5em;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .navbar a {
+      font-size: 0.5em;
+      padding: 1em 0.2em;
+    }
+    .navbar a::before {
+      content: " | ";
+      /* margin-right: 1em; */
+    }
+  }
+
+
 
 .container-fluid{
 	margin-top: 10px;

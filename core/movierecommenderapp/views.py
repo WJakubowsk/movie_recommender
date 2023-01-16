@@ -1,10 +1,10 @@
+import random
 import pandas as pd
 import requests
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponse, redirect
 from omdb import OMDBClient
-
 from .models import Show, Rating, Watched
 
 omdb_api = OMDBClient(apikey="730a97c3")
@@ -25,8 +25,15 @@ def index(request):
     return render(request, 'index.html', {'movies': movies})
 
 
+@login_required(login_url='login')
 def home(request):
-    return render(request, 'home.html')
+    movies = Show.objects.all()
+    max_range = min(20, len(movies))
+    rangee = int(request.GET.get('rangee', max_range // 3))
+    movies = random.sample(list(movies), rangee)
+    if movies == []:
+        return render(request, 'home.html')
+    return render(request, 'home.html', {'movies': movies, 'max_range': max_range})
 
 
 def signup(request):
@@ -83,6 +90,7 @@ def save_movie_toDB(title):
     return movie
 
 
+@login_required(login_url='login')
 def search_with_api(request):
     query = request.GET.get('q')
     movies = list(omdb_api.get(search=query))

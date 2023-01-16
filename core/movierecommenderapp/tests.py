@@ -7,21 +7,25 @@ from .models import Show
 class ViewTest(TestCase):
 
     def test_create_user(self):
-        User = get_user_model()
-        user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpassword')
+        user = self.create_user()
         self.assertEqual(user.username, 'testuser')
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
 
-        self.assertTrue(User.objects.filter(username='testuser').exists())
+        self.assertTrue(get_user_model().objects.filter(username='testuser').exists())
 
         user.delete()
 
-        self.assertFalse(User.objects.filter(username='testuser').exists())
+        self.assertFalse(get_user_model().objects.filter(username='testuser').exists())
+
+    def create_user(self):
+        User = get_user_model()
+        user = User.objects.create_user(
+            username='testuser',
+            email='test@example.com',
+            password='testpassword')
+        return user
 
     def test_search(self):
         # add a show to the database
@@ -37,6 +41,10 @@ class ViewTest(TestCase):
             plot='Test Plot',
             box_office='Test Box Office'
         )
+        # craete user
+        user = self.create_user()
+        # login user
+        self.client.login(username='testuser', password='testpassword')
 
         response = self.client.get(reverse('search'), {'q': 'Test Movie'})
         self.assertEqual(response.status_code, 200)

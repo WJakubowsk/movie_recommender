@@ -1,11 +1,13 @@
-from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth import login, authenticate, get_user_model, logout
-from omdb import OMDBClient
-from .models import Show, Rating
-from django.contrib.auth.decorators import login_required
+import random
+
 import pandas as pd
 import requests
-import numpy as np
+from django.contrib.auth import login, authenticate, get_user_model, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, HttpResponse, redirect
+from omdb import OMDBClient
+
+from .models import Show, Rating
 
 omdb_api = OMDBClient(apikey="730a97c3")
 api_url = 'http://www.omdbapi.com/?apikey=730a97c3'
@@ -25,8 +27,15 @@ def index(request):
     return render(request, 'index.html', {'movies': movies})
 
 
+@login_required(login_url='login')
 def home(request):
-    return render(request, 'home.html')
+    movies = Show.objects.all()
+    max_range = min(20, len(movies))
+    rangee = int(request.GET.get('rangee', max_range // 3))
+    movies = random.sample(list(movies), rangee)
+    if movies == []:
+        return render(request, 'home.html')
+    return render(request, 'home.html', {'movies': movies, 'max_range': max_range})
 
 
 def signup(request):
@@ -83,6 +92,7 @@ def save_movie(title):
     return movie
 
 
+@login_required(login_url='login')
 def search_with_api(request):
     query = request.GET.get('q')
     movies = list(omdb_api.get(search=query))
@@ -114,41 +124,44 @@ def movie_detail(request, title):
 
 @login_required(login_url='login')
 def recommend(request):
-    movie_rating=pd.DataFrame(list(Rating.objects.all().values()))
+    movie_rating = pd.DataFrame(list(Rating.objects.all().values()))
     movies = pd.DataFrame(list(Show.objects.all().values()))
     current_user_id = request.user.user
-    n_recommendations = 10 # to set dynamically for user
+    n_recommendations = 10  # to set dynamically for user
 
     # if new user not rated any movie, we have to recommend him the highest-rated movies
     if current_user_id not in movie_rating.user.unique():
         movie_list = (movie_rating.groupby('show').mean()['rating'] * movie_rating.groupby('show').count()['rating']) \
-            .sort_values(ascending=False) \
-            .reset_index()['show'] \
-            .iloc[:n_recommendations] \
+                         .sort_values(ascending=False) \
+                         .reset_index()['show'] \
+                         .iloc[:n_recommendations] \
             .astype(int) \
             .to_list()
     else:
         # create similarity standardized matrix using Pearson's correlation coefficients
-        user_ratings = movie_rating.pivot_table(index=['user'],columns=['show'],values='rating')
-        user_ratings_norm = user_ratings.subtract(user_ratings.mean(axis=1), axis = 'rows')
+        user_ratings = movie_rating.pivot_table(index=['user'], columns=['show'], values='rating')
+        user_ratings_norm = user_ratings.subtract(user_ratings.mean(axis=1), axis='rows')
         user_similarity = user_ratings_norm.T.corr()
 
         # remove the user from similar users list
         user_similarity.drop(index=current_user_id, inplace=True)
         # set user similarity threshold
         user_similarity_threshold = 0.3
-        n = 10 #number of similar users 
+        n = 10  # number of similar users
         # Get top n similar users
-        similar_users = user_similarity[user_similarity[current_user_id]>user_similarity_threshold][current_user_id].sort_values(ascending=False).iloc[:n] 
+        similar_users = user_similarity[user_similarity[current_user_id] > user_similarity_threshold][
+                            current_user_id].sort_values(ascending=False).iloc[:n]
 
         # pick movies watched by selected user
-        current_user_id_watched = user_ratings_norm[user_ratings_norm.index == current_user_id].dropna(axis=1, how='all')
+        current_user_id_watched = user_ratings_norm[user_ratings_norm.index == current_user_id].dropna(axis=1,
+                                                                                                       how='all')
 
         # select movies that similar users watched. Remove movies that none of the similar users have watched
-        similar_user_movies = user_ratings_norm[user_ratings_norm.index.isin(similar_users.index)].dropna(axis=1, how='all')
+        similar_user_movies = user_ratings_norm[user_ratings_norm.index.isin(similar_users.index)].dropna(axis=1,
+                                                                                                          how='all')
 
         # remove films watched by the requested user from recommendations
-        #bypass for now, to be removed
+        # bypass for now, to be removed
         similar_user_movies.drop(current_user_id_watched.columns, axis=1, inplace=True, errors='ignore')
         # A dictionary to store item scores
         item_score = {}
@@ -156,38 +169,38 @@ def recommend(request):
         for i in similar_user_movies.columns:
             # Get the ratings for movie i
             movie_rating = similar_user_movies[i]
-            
+
             # Create a variable to store the score
             total = 0
-            
+
             # Create a variable to store the number of scores
             count = 0
-            
+
             # Loop through similar users
             for u in similar_users.index:
                 # If the movie has rating
                 if not pd.isna(movie_rating[u]):
                     # Score is the sum of user similarity score multiply by the movie rating
                     score = similar_users[u] * movie_rating[u]
-                
+
                     # Add the score to the total score for the movie so far
                     total += score
-                    
+
                     # Add 1 to the count
                     count += 1
-            
+
             # Get the average score for the item
             item_score[i] = total / count
 
         # Convert dictionary to pandas dataframe
         item_score = pd.DataFrame(item_score.items(), columns=['movie', 'movie_score'])
-            
+
         # Sort the movies by score
         ranked_item_score = item_score.sort_values(by='movie_score', ascending=False)
 
         # get recommendations
         movie_list = ranked_item_score['movie'].iloc[:n_recommendations].astype(int).to_list()
-    
+
     recommendations = movies.loc[movies['id'].isin(movie_list)].to_dict('records')
     context = {'movies': recommendations}
     return render(request, 'recommend.html', context)

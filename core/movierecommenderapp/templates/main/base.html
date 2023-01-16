@@ -26,7 +26,6 @@
     <div class="menu">
       <div class="left">
         <a href="/">MyMovies</a>
-        <a href="{% url 'example' 'fight' %}">example list</a>
         <a href="{% url 'search' %}">Search</a>
         <a href="{% url 'recommend' %}">Recommendations</a>
       </div>
@@ -35,7 +34,7 @@
             <a href="{% url 'signup' %}">Sign Up</a>
             <a href="{% url 'login' %}">Login</a>
         {% else %}
-        <a href="{% url 'info' %}">Account</a>
+        <a href="{% url 'info' %}">My Account</a>
         <a href="{% url 'logout' %}">Logout</a>
         {% endif %}
       </div>

@@ -64,15 +64,16 @@
 
   @media (max-width: 550px) {
     .navbar a {
-      font-size: 1em;
-      padding: 1em 0.3em;
+      font-size: 0.1em;
+      padding: 0.1em 0.03em;
     }
     .navbar a::before {
       content: " | ";
       /* margin-right: 1em; */
     }
   }
-  
+
+
 
 .container-fluid{
 	margin-top: 10px;

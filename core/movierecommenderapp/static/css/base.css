@@ -51,7 +51,7 @@
     margin-left: 0em;
   }
   
-  @media (max-width: 860px) {
+  @media (max-width: 860px) and (min-width: 550px) {
     .navbar a {
       font-size: 1em;
       padding: 1em 0.6em;
@@ -64,8 +64,8 @@
 
   @media (max-width: 550px) {
     .navbar a {
-      font-size: 0.1em;
-      padding: 0.1em 0.03em;
+      font-size: 0.5em;
+      padding: 1em 0.2em;
     }
     .navbar a::before {
       content: " | ";

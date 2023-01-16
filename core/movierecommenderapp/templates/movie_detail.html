@@ -11,5 +11,18 @@
     <p>{{ movie.box_office }}</p>
     <p>{{ movie.plot }}</p>
     <img src="{{ movie.poster }}" alt="Poster for {{ movie.title }}">
+    {% if not is_watched %}
+        <form action="{% url 'save_movie' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="movie" value="{{ movie }}">
+            <input type="submit" value="Save Movie">
+        </form>
+    {% else %}
+        <form action="{% url 'remove_movie' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="movie" value="{{ movie }}">
+            <input type="submit" value="Remove Movie">
+        </form>
+    {% endif %}
 
 {% endblock %}

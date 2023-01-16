@@ -1,13 +1,11 @@
 import random
-
 import pandas as pd
 import requests
 from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponse, redirect
 from omdb import OMDBClient
-
-from .models import Show, Rating
+from .models import Show, Rating, Watched
 
 omdb_api = OMDBClient(apikey="730a97c3")
 api_url = 'http://www.omdbapi.com/?apikey=730a97c3'
@@ -74,7 +72,7 @@ def logout_view(request):
     return redirect('index')
 
 
-def save_movie(title):
+def save_movie_toDB(title):
     if Show.objects.filter(title=title).exists():
         return Show.objects.get(title=title)
 
@@ -116,10 +114,11 @@ def search(request):
 
 def movie_detail(request, title):
     try:
-        movie = save_movie(title)
+        movie = save_movie_toDB(title)
     except ValueError:
         return HttpResponse('Server error')
-    return render(request, 'movie_detail.html', {'movie': movie})
+    is_watched = Watched.objects.filter(user=request.user, show=movie).exists()
+    return render(request, 'movie_detail.html', {'movie': movie, 'is_watched': is_watched})
 
 
 @login_required(login_url='login')
@@ -214,3 +213,34 @@ def info(request):
 
 def about(request):
     return render(request, 'about.html')
+
+
+@login_required(login_url='login')
+def list_view(request):
+    user_movies = Watched.objects.filter(user=request.user.user)
+    user_movies = [movie.show for movie in user_movies]
+    if not Watched.objects.filter(user=request.user).exists():
+        return render(request, 'home.html', {'error': 'No movies in your list'})
+    return render(request, 'list.html', {'user_movies': list(user_movies)})
+
+
+@login_required(login_url='login')
+def save_movie_watched(request):
+    if request.method == 'POST':
+        show = request.POST.get('movie')
+        user = request.user
+        assert Show.objects.filter(title=show).exists()
+        if Watched.objects.filter(user=user, show=Show.objects.get(title=show)).exists():
+            return render('list.html', {'error': 'Movie already in list'})
+        saved_show = Watched(user=user, show=Show.objects.get(title=show))
+        saved_show.save()
+    return redirect('list')
+
+
+@login_required(login_url='login')
+def remove_movie_watched(request):
+    if request.method == 'POST':
+        show = request.POST.get('movie')
+        user = request.user
+        Watched.objects.filter(user=user, show=Show.objects.get(title=show)).delete()
+    return redirect('list')

@@ -19,5 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('app/v0/', include('movierecommenderapp.urls')),
-    path('app/v0/', include('django.contrib.auth.urls')),
+    path('', include('movierecommenderapp.urls')),
 ]

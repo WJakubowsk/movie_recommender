@@ -1,0 +1,121 @@
+#popup {
+    width: 200px;
+    height: 150px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 10;
+}
+
+#content {
+    background-color: lightgray;
+}
+
+.navbar{
+	border-radius: 0;
+	min-height: 20px;
+  background-color: rgb(95, 133, 177);
+  color: rgb(226, 216, 216);
+  overflow: hidden;
+}
+.navbar a {
+    color: rgb(226, 226, 226);
+    text-decoration: none;
+    font-size: 1.5em;
+    float: left;
+    text-align: center;
+    padding: 1em 0.5em;
+  }
+  
+  .navbar a:hover {
+    color: rgb(224, 166, 166);
+  }
+  
+  .right {
+    float: right;
+  }
+
+  .navbar a::before {
+    content: " | ";
+    margin-right: 0.85em;
+    /* margin-left: 0.85em; */
+  }
+
+  .navbar a:first-child:before {
+    content: "";
+    margin-left: 0em;
+  }
+  
+  @media (max-width: 860px) and (min-width: 550px) {
+    .navbar a {
+      font-size: 1em;
+      padding: 1em 0.6em;
+    }
+    .navbar a::before {
+      content: " | ";
+      margin-right: 0.5em;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .navbar a {
+      font-size: 0.5em;
+      padding: 1em 0.2em;
+    }
+    .navbar a::before {
+      content: " | ";
+      /* margin-right: 1em; */
+    }
+  }
+
+
+
+.container-fluid{
+	margin-top: 10px;
+}
+
+html, body {
+  height: 100%;
+}
+
+
+.page-footer{
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  background-color: rgb(95, 133, 177);
+  height: 10%;
+  width: 100%;
+  color:rgb(226, 226, 226);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.page-footer > a {
+  position: relative;
+  top: 30%;
+  transform: translateY(-50%);
+  color:rgb(226, 226, 226);
+  font-size: 18px;
+  text-decoration: none;
+}
+
+.page-footer > a:hover {
+  color: rgb(224, 166, 166);
+}
+
+.authors-container{
+  display: flex;
+}
+
+.author1{
+  flex: 1;
+}
+.author2{
+  flex: 1;
+}

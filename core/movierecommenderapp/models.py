@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class Show(models.Model):
-    movie_id = models.CharField(max_length=50)
+    show = models.CharField(max_length=50, unique=True, null=False)
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
@@ -13,12 +13,15 @@ class Show(models.Model):
     director = models.CharField(max_length=100)
     actors = models.CharField(max_length=500)
     runtime = models.CharField(max_length=50)
+    plot = models.CharField(max_length=500)
+    box_office = models.CharField(max_length=50)
 
     def __str__(self):
         return self.title
 
 
-class User(AbstractUser):  # TODO distinct fields?
+class User(AbstractUser):
+    user = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100, unique=True)
     email = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
@@ -30,8 +33,8 @@ class User(AbstractUser):  # TODO distinct fields?
 
 
 class Rating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    show = models.ForeignKey(Show, on_delete=models.CASCADE)
+    user = models.IntegerField(null=False)
+    show = models.CharField(max_length=50, null=False)
     rating = models.IntegerField()
 
 

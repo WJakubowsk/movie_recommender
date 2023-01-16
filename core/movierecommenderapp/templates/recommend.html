@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% block title %}Recommendations{% endblock title %}
+
+{% block content %}
+
+<h2>Recommendations for you</h2>
+</div>
+<hr>
+<br>
+
+	<div class="container-fluid">
+
+    <!-- Movie list -->
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        {% for movie in movies %}
+            <div style="display: inline-block;">
+                <figure style="text-align: center">
+                    <img src="{{ movie.poster }}" width="100">
+                    <figcaption>{{ movie.title }}</figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+{% endblock %}

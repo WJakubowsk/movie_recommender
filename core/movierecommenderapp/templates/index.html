@@ -3,12 +3,16 @@
 {% block content %}
     <h2>MyMovies is a website where you can find information about movies.</h2>
 
-    Here are some movies example movies:
-    {% for movie in movies %}
-        <p>{{ movie.title }} <img src="{{ movie.poster }}" width="100"></p>
-    {% endfor %}
+    Here are some example movies:
+    <div style="overflow-x: scroll; white-space: nowrap;">
+        {% for movie in movies %}
+            <div style="display: inline-block;">
+                <figure style="text-align: center">
+                    <img src="{{ movie.poster }}" width="100">
+                    <figcaption>{{ movie.title }}</figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+    </div>
 
-{#    <li><a href="{% url 'example' 'fight' %}">ex list</a></li>#}
-    <li><a href="{% url 'signup' %}">signup</a></li>
-    <li><a href="{% url 'login' %}">login</a></li>
 {% endblock %}

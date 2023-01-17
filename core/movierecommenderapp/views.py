@@ -29,7 +29,7 @@ def index(request):
 def home(request):
     movies = Show.objects.all()
     max_range = min(20, len(movies))
-    rangee = int(request.GET.get('rangee', max_range // 3))
+    rangee = int(request.GET.get('rangee', max_range // 2))
     movies = random.sample(list(movies), rangee)
     if movies == []:
         return render(request, 'home.html')
@@ -111,7 +111,7 @@ def search(request):
     return render(request, 'search_results.html', {'results': results,
                                                    'query': query})
 
-
+@login_required(login_url='login')
 def movie_detail(request, title):
     try:
         movie = save_movie_toDB(title)
@@ -127,7 +127,7 @@ def recommend(request):
     movies = pd.DataFrame(list(Show.objects.all().values()))
     current_user_id = request.user.user
     n_recommendations = 10  # to set dynamically for user
-
+    number_of_rated_movies = 0
     # if new user not rated any movie, we have to recommend him the highest-rated movies
     if current_user_id not in movie_rating.user.unique():
         movie_list = (movie_rating.groupby('show').mean()['rating'] * movie_rating.groupby('show').count()['rating']) \
@@ -142,6 +142,8 @@ def recommend(request):
         user_ratings_norm = user_ratings.subtract(user_ratings.mean(axis=1), axis='rows')
         user_similarity = user_ratings_norm.T.corr()
 
+        # get number of ratings given by the user
+        number_of_rated_movies = user_ratings.loc[current_user_id].notna().sum()
         # remove the user from similar users list
         user_similarity.drop(index=current_user_id, inplace=True)
         # set user similarity threshold
@@ -201,7 +203,7 @@ def recommend(request):
         movie_list = ranked_item_score['movie'].iloc[:n_recommendations].astype(int).to_list()
 
     recommendations = movies.loc[movies['id'].isin(movie_list)].to_dict('records')
-    context = {'movies': recommendations}
+    context = {'movies': recommendations, 'n_rated_movies': number_of_rated_movies}
     return render(request, 'recommend.html', context)
 
 

@@ -1,16 +1,20 @@
 {% extends 'main/base.html' %}
 {% block title %}Details: {{ query }}{% endblock %}
 {% block content %}
-
-    <h1>{{ movie }}</h1>
-    <p>{{ movie.category }}</p>
-    <p>{{ movie.year }}</p>
-    <p>{{ movie.director }}</p>
-    <p>{{ movie.actors }}</p>
-    <p>{{ movie.runtime }}</p>
-    <p>{{ movie.box_office }}</p>
-    <p>{{ movie.plot }}</p>
-    <img src="{{ movie.poster }}" alt="Poster for {{ movie.title }}">
+<div style="margin: 0.5em"><h1>Movie details</h1></div>
+<div class="details-container" style="display: flex;">
+    <div class="movie-poster" style="width: 35%; padding-left: 7em;">
+        <img src="{{ movie.poster }}" alt="Poster for {{ movie.title }}">
+    </div>
+    <div class="details-text" style="width: 35%">
+    <h2>{{ movie }}</h2>
+    <p><i>Category:</i> {{ movie.category }}</p>
+    <p><i>Release year:</i> {{ movie.year }}</p>
+    <p><i>Director:</i> {{ movie.director }}</p>
+    <p style="text-align: justify"><i>Cast:</i> {{ movie.actors }}</p>
+    <p><i>Runtime:</i> {{ movie.runtime }}</p>
+    <p><i>Box office:"</i> {{ movie.box_office }}</p>
+    <p style="text-align: justify"><i>Description:</i> {{ movie.plot }}</p>
     {% if not is_watched %}
         <form action="{% url 'save_movie' %}" method="post">
             {% csrf_token %}
@@ -24,5 +28,7 @@
             <input type="submit" value="Remove Movie">
         </form>
     {% endif %}
+</div>
+</div>
 
 {% endblock %}

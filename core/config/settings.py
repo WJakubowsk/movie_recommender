@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "movierecommenderapp",
+    'authentication',
     'crispy_forms',
 ]
 
@@ -56,7 +57,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -84,8 +85,8 @@ if password != "":
             'PASSWORD': password,
             'PORT': '1433',
             'OPTIONS': {
-                    'driver': 'ODBC Driver 17 for SQL Server',
-                },
+                'driver': 'ODBC Driver 17 for SQL Server',
+            },
         },
         "local": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -94,15 +95,15 @@ if password != "":
     }
 else:
     DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'movierecommenderapp.User'
+AUTH_USER_MODEL = 'authentication.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -133,13 +134,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
-
-STATICFILES_DIRS = [
-    'movierecommenderapp/static'
-]
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'config/static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# EMAIL CONFIG
+EMAIL_FROM_USER = config('EMAIL_FROM_USER', default='')
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
+import sys
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'

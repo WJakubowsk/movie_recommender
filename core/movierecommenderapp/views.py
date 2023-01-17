@@ -1,19 +1,15 @@
 import random
 import pandas as pd
 import requests
-from django.contrib.auth import login, authenticate, get_user_model, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.shortcuts import render, HttpResponse, redirect
 from omdb import OMDBClient
 from .models import Show, Rating, Watched
+from django.utils import timezone
 
 omdb_api = OMDBClient(apikey="730a97c3")
 api_url = 'http://www.omdbapi.com/?apikey=730a97c3'
-
-
-def example(request, title):
-    movies = omdb_api.get(search=title)
-    return render(request, "example.html", {"movies": movies, "title": title})
 
 
 def index(request):
@@ -25,51 +21,14 @@ def index(request):
     return render(request, 'index.html', {'movies': movies})
 
 
-@login_required(login_url='login')
 def home(request):
     movies = Show.objects.all()
     max_range = min(20, len(movies))
-    rangee = int(request.GET.get('rangee', max_range // 2))
+    rangee = max(int(request.GET.get('rangee', max_range // 2)), 1)
     movies = random.sample(list(movies), rangee)
     if movies == []:
         return render(request, 'home.html')
     return render(request, 'home.html', {'movies': movies, 'max_range': max_range})
-
-
-def signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        firstname = request.POST['firstname']
-        lastname = request.POST['lastname']
-        if get_user_model().objects.filter(username=username).exists():
-            return render(request, 'signUp.html', {'error': 'Username already exists'})
-        user = get_user_model().objects.create_user(username=username, email=email, password=password,
-                                                    first_name=firstname, last_name=lastname)
-        login(request, user)
-        return redirect('home')
-    else:
-        return render(request, 'signUp.html')
-
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
-    else:
-        return render(request, 'login.html')
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('index')
 
 
 def save_movie_toDB(title):
@@ -90,7 +49,6 @@ def save_movie_toDB(title):
     return movie
 
 
-@login_required(login_url='login')
 def search_with_api(request):
     query = request.GET.get('q')
     movies = list(omdb_api.get(search=query))
@@ -99,19 +57,6 @@ def search_with_api(request):
     return render(request, "api_results.html", {"movies": movies, "query": query})
 
 
-@login_required(login_url='login')
-def search(request):
-    query = request.GET.get('q')
-    results = Show.objects.filter(title__contains=query)
-    results = list(results)
-    if results is None or len(results) == 0:
-        # search_for_movies(title) # TODO
-        return render(request, 'home.html', {'error': 'No results found'})
-
-    return render(request, 'search_results.html', {'results': results,
-                                                   'query': query})
-
-@login_required(login_url='login')
 def movie_detail(request, title):
     try:
         movie = save_movie_toDB(title)
@@ -209,8 +154,18 @@ def recommend(request):
 
 @login_required(login_url='login')
 def info(request):
-    # TODO
-    return render(request, 'userInfo.html')
+    user = request.user
+    if user.is_authenticated:
+        now = timezone.now()
+        registration_time = now - user.date_joined
+        registration_time = registration_time.days
+
+    user_movies = Watched.objects.filter(user=request.user.user)
+    time_watched = [int(movie.show.runtime.split(' ')[0]) for movie in user_movies]
+    sum_watched = sum(time_watched)
+
+    return render(request, 'userInfo.html',
+                  {'user': user, 'registration_time': registration_time, 'sum_watched': sum_watched})
 
 
 def about(request):
@@ -226,7 +181,6 @@ def list_view(request):
     return render(request, 'list.html', {'user_movies': list(user_movies)})
 
 
-@login_required(login_url='login')
 def save_movie_watched(request):
     if request.method == 'POST':
         show = request.POST.get('movie')
@@ -239,7 +193,6 @@ def save_movie_watched(request):
     return redirect('list')
 
 
-@login_required(login_url='login')
 def remove_movie_watched(request):
     if request.method == 'POST':
         show = request.POST.get('movie')

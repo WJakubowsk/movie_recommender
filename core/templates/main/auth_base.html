@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% block error_msg %}
+
+    {% if messages %}
+
+
+        {% for message in messages %}
+
+
+            <div style="color: #FF0000">
+
+                {{ message }}
+
+
+            </div>
+
+
+
+        {% endfor %}
+
+
+
+
+    {% endif %}
+{% endblock error_msg %}

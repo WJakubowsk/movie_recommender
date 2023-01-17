@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% block title %}Account Info{% endblock title %}
+
+{% block content %}
+    <h2>Account info</h2>
+    <h2>User Information</h2>
+    <p>Username: {{ user.username }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>First Name: {{ user.first_name }}</p>
+    <p>Last Name: {{ user.last_name }}</p>
+
+    <p>User has been on this site for {{ registration_time }} days </p>
+    <p>Spent {{ sum_watched }} min on watching movies</p>
+{% endblock %}

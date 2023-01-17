@@ -1,0 +1,19 @@
+{% extends 'main/auth_base.html'%}
+{% block title %}Login{% endblock title %}
+{% block content %}
+
+<div>Log-in</div>
+
+
+<form method="post" action={% url 'login' %}>
+    {% csrf_token %}
+
+    <input type="text" required name="username" placeholder="Username" value="{{ data.username }}"/>
+    <input type="password" required name="password" placeholder="Password"/>
+    <button>Login</button>
+
+</form>
+
+<div>Dont have an account? <a href={% url 'register' %}>Signup</a></div>
+
+{% endblock %}

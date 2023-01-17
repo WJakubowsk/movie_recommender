@@ -20,4 +20,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('app/v0/', include('movierecommenderapp.urls')),
     path('', include('movierecommenderapp.urls')),
+    path('auth/', include('authentication.urls')),
 ]

@@ -3,7 +3,12 @@
 
 {% block content %}
 
-<h2>Recommendations for you</h2>
+<h2>Here are your recommendations</h2>
+{% if n_rated_movies > 10 %}
+<h4>Predictions are based on your ratings and ratings of users with similar taste to you.</h4>
+{% else %}
+<h4>Predictions are based on the highest rated movies. If you want to get more personal recommendations, feel free to rate more movies on our site.</h4>
+{% endif %}
 </div>
 <hr>
 <br>
@@ -14,9 +19,11 @@
     <div style="overflow-x: scroll; white-space: nowrap;">
         {% for movie in movies %}
             <div style="display: inline-block;">
-                <figure style="text-align: center">
-                    <img src="{{ movie.poster }}" width="100">
-                    <figcaption>{{ movie.title }}</figcaption>
+                <figure style="text-align: center; text-decoration: none">
+                    <a href="{% url 'detail' movie.title %}">
+                        <img src="{{ movie.poster }}" width="150">
+                    </a>
+                    <figcaption style="font-size: 1.25em">{{ movie.title }}</figcaption>
                 </figure>
             </div>
         {% endfor %}

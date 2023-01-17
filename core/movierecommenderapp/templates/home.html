@@ -4,29 +4,31 @@
 {% block content %}
 
     <h2>Welcome, {{ request.user }}!</h2>
-
+    <h3>This is your account on MyMovies website. Search for a new movie here:</h3>
     <form method="GET" action="{% url 'search' %}">
         <input type="text" name="q" placeholder="Search for a movie">
         <button type="submit">Search</button>
     </form>
 
     {% if movies %}
-        <h3>Random picks:</h3>
-        <div class="slidecontainer blur">
-            <input type="range" min="1" max="{{ max_range }}" value="{{ max_range }}//3" class="slider" id="myRange">
+        <h3>Or check these movies:</h3>
+        <!-- <div class="slidecontainer blur">
+            <input type="range" min="1" max="{{ max_range }}" value="{{ max_range }}//2" class="slider" id="myRange">
             <div id="slider-value">{{ movies|length }}</div>
-        </div>
-        <div style="flex-wrap: wrap">
-            {% for movie in movies %}
-                <div style="display: inline-block;">
-                    <figure style="text-align: center">
-                        <a href="{% url 'detail' movie.title %}"><img src="{{ movie.poster }}" width="200"
-                                                                      alt="Poster for {{ movie.title }}"></a>
-                        <figcaption>{{ movie.title }}</figcaption>
-                    </figure>
-                </div>
-            {% endfor %}
-        </div>
+        </div> -->
+        <div style="overflow-x: scroll; white-space: nowrap">
+        {% for movie in movies %}
+            <div style="display: inline-block;">
+                <figure style="text-align: center; text-decoration: none">
+                    <a href="{% url 'detail' movie.title %}">
+                        <img src="{{ movie.poster }}" width="150">
+                    </a>
+                    <figcaption style="font-size: 1.25em">{{ movie.title }}</figcaption>
+                </figure>
+            </div>
+        {% endfor %}
+    </div>
+
     {% endif %}
 
     <script>

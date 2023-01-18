@@ -2,13 +2,14 @@
 {% block title %}Account Info{% endblock title %}
 
 {% block content %}
-    <h2>Account info</h2>
-    <h2>User Information</h2>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>First Name: {{ user.first_name }}</p>
-    <p>Last Name: {{ user.last_name }}</p>
+<div class="info-container" style="margin-left: 2em;">
+    <h2 style="margin-bottom: 1.5em;">Your account details</h2>
+    <p><i>Username:</i> {{ user.username }}</p>
+    <p><i>Email:</i> {{ user.email }}</p>
+    <p><i>First Name:</i> {{ user.first_name }}</p>
+    <p><i>Last Name:</i> {{ user.last_name }}</p>
 
-    <p>User has been on this site for {{ registration_time }} days </p>
-    <p>Spent {{ sum_watched }} min on watching movies</p>
+    <p><i>Time elapsed since your account creation:</i> {{ registration_time }} days</p>
+    <p><i>Your time spent on watching movies:</i> {{ sum_watched }} min</p>
+</div>
 {% endblock %}

@@ -2,13 +2,24 @@
 {% block title %}Search: {{ query }}{% endblock %}
 {% block content %}
 
-<h1>List of movies that matches: {{ query }}</h1>
+<h2>List of movies that matches: {{ query }}</h2>
 
-    {{ movies|length }} movies found.
-
+<h4>{{ movies|length }} movies found.</h4>
+<br><br>
+<div style="overflow-x: scroll; white-space: nowrap">
 {% for movie in movies %}
-    <p>{{ movie.title }} at {{ movie.year }}</p>
-    <a href="{% url 'detail' movie.title %}"><img src="{{ movie.poster }}" height=120 alt="Poster for {{ movie.title }}"></a>
+    <div style="display: inline-block;">
+        <figure style="text-align: center; text-decoration: none">
+            <a href="{% url 'detail' movie.title %}">
+                <img src="{{ movie.poster }}" height="300">
+            </a>
+            <figcaption style="margin-top: 0.5em;font-size: 1.25em; font-style: italic;">{{ movie.title }}</figcaption>
+        </figure>
+    </div>
 {% endfor %}
+</div>
 
 {% endblock %}
+
+<!-- <p>{{ movie.title }} at {{ movie.year }}</p>
+<a href="{% url 'detail' movie.title %}"><img src="{{ movie.poster }}" height=120 alt="Poster for {{ movie.title }}"></a> -->

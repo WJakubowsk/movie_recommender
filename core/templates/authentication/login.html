@@ -1,19 +1,24 @@
 {% extends 'main/auth_base.html'%}
 {% block title %}Login{% endblock title %}
 {% block content %}
+<div class="login-container" style="position: absolute; top: 40%; left: 38%">
+    <h2>Log in to your account</h2>
 
-<div>Log-in</div>
 
+    <form method="post" action={% url 'login' %}>
+        {% csrf_token %}
 
-<form method="post" action={% url 'login' %}>
-    {% csrf_token %}
+        <input type="text" required name="username" placeholder="Username" value="{{ data.username }}" style="padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
+        <input type="password" required name="password" placeholder="Password" style="padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
+        <button style="  background-color: rgb(95, 133, 177);
+        border: none;
+        color: white;
+        padding: 10px 10px;
+        text-decoration: none;
+        margin: 2px 1px;
+        cursor: pointer;">Login</button>
 
-    <input type="text" required name="username" placeholder="Username" value="{{ data.username }}"/>
-    <input type="password" required name="password" placeholder="Password"/>
-    <button>Login</button>
-
-</form>
-
-<div>Dont have an account? <a href={% url 'register' %}>Signup</a></div>
-
+    </form>
+    <div style="margin-top: 1em;">You don't have an account? <a style="text-decoration: none; color: rgb(95, 133, 177);"href={% url 'register' %}>Sign up</a> here</div>
+</div>
 {% endblock %}

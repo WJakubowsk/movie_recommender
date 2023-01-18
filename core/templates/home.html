@@ -6,8 +6,14 @@
     <h2>Welcome, {{ request.user.first_name }}!</h2>
     <h3>This is your account on MyMovies website. Search for a new movie here:</h3>
     <form method="GET" action="{% url 'search' %}">
-        <input type="text" name="q" placeholder="Search for a movie">
-        <button type="submit">Search</button>
+        <input type="text" name="q" placeholder="Search for a movie" style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;">
+        <button type="submit" style="margin: 1em; background-color: rgb(95, 133, 177);
+        border: none;
+        color: white;
+        padding: 10px 8px;
+        text-decoration: none;
+        margin: 2px 1px;
+        cursor: pointer;">Search</button>
     </form>
 
     {% if movies %}
@@ -27,7 +33,7 @@
                 </figure>
             </div>
         {% endfor %}
-    </div>
+        </div>
 
     {% endif %}
 

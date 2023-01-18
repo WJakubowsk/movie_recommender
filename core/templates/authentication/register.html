@@ -2,26 +2,34 @@
 {% block title %}Register{% endblock title %}
 
 {% block content %}
-
+<div class="register-container" style="position: absolute; top: 30%; left:38%">
+    <h2 style="text-align: center;">Create an account</h2>
     <form method="post" action={% url 'register' %}>
         {% csrf_token %}
-        <input type="text" name="username" value="{{ data.username }}" placeholder="Username"/>
-
-        <input type="text" name="email" value="{{ data.email }}" placeholder="E-mail address"/>
-
-        <input type="text" name="first_name" value="{{ data.first_name }}" placeholder="First name"/>
-        <input type="text" name="last_name" value="{{ data.last_name }}" placeholder="Last name"/>
-
-        <input type="password" name="password" placeholder="Password"/>
-
-
+        <input type="text" name="username" value="{{ data.username }}" placeholder="Username" style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
+        <input type="text" name="email" value="{{ data.email }}" placeholder="E-mail address" style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
+        <br>
+        <input type="text" name="first_name" value="{{ data.first_name }}" placeholder="First name" style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
+        <input type="text" name="last_name" value="{{ data.last_name }}" placeholder="Last name" style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
+        <br>
+        <input type="password" name="password" placeholder="Password" style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"/>
         <input
                 type="password"
                 name="password2"
                 placeholder="Repeat Password"
+                style="margin: 0.5em; padding: 8px; border: 2px solid rgb(95, 133, 177); border-radius: 4px;"
         />
-        <button>Submit</button>
+        <br>
+        <button style="margin: 1em; background-color: rgb(95, 133, 177);
+        border: none;
+        color: white;
+        padding: 10px 175px;
+        text-decoration: none;
+        margin: 2px 1px;
+        cursor: pointer;">Submit</button>
 
     </form>
-    <div>Have an account? <a href={% url 'login' %}>Login</a></div>
+    <br>
+    <div style="margin-top: 1em; text-align: center;">Already have the account? <a style="text-decoration: none; color: rgb(95, 133, 177)" href={% url 'login' %}>Log in</a> here</div>
+</div>
 {% endblock %}

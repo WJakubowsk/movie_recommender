@@ -2,7 +2,6 @@ import random
 import pandas as pd
 import requests
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
 from django.shortcuts import render, HttpResponse, redirect
 from omdb import OMDBClient
 from .models import Show, Rating, Watched
@@ -63,6 +62,12 @@ def movie_detail(request, title):
     except ValueError:
         return HttpResponse('Server error')
     is_watched = Watched.objects.filter(user=request.user, show=movie).exists()
+    # if there are already rating in the DB, show the rating
+    if Rating.objects.filter(user=request.user.user, show=movie.show).exists():
+        return render(request, 'movie_detail.html', {'movie': movie,
+                                                     'is_watched': is_watched,
+                                                     'rating': Rating.objects.get(user=request.user.user,
+                                                                                  show=movie.show).rating})
     return render(request, 'movie_detail.html', {'movie': movie, 'is_watched': is_watched})
 
 
@@ -190,7 +195,7 @@ def save_movie_watched(request):
             return render('list.html', {'error': 'Movie already in list'})
         saved_show = Watched(user=user, show=Show.objects.get(title=show))
         saved_show.save()
-    return redirect('list')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def remove_movie_watched(request):
@@ -198,4 +203,19 @@ def remove_movie_watched(request):
         show = request.POST.get('movie')
         user = request.user
         Watched.objects.filter(user=user, show=Show.objects.get(title=show)).delete()
-    return redirect('list')
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+def rate_movie(request):
+    rating = request.POST.get('rating')
+    title = request.POST.get('movie_title')
+    movie_id = request.POST.get('movie_id')
+    # see if the rating already exists
+    if Rating.objects.filter(user=request.user.user, show=movie_id).exists():
+        # update the rating
+        Rating.objects.filter(user=request.user.user, show=movie_id).update(rating=rating)
+    else:
+        # create a new rating
+        Rating.objects.create(user=request.user.user, show=movie_id, rating=rating)
+    return redirect('/detail/' + title)
+    # return redirect(request.META.get('HTTP_REFERER'))

@@ -1,46 +1,106 @@
 {% extends 'main/base.html' %}
 {% block title %}Details: {{ query }}{% endblock %}
 {% block content %}
-<div style="margin: 0.5em"><h1>Movie details</h1></div>
-<div class="details-container" style="display: flex;">
-    <div class="movie-poster" style="width: 35%; padding-left: 7em;">
-        <img src="{{ movie.poster }}" alt="Poster for {{ movie.title }}">
-    </div>
-    <div class="details-text" style="width: 35%">
-    <h2 style="margin-bottom: 1.5em;">{{ movie }}</h2>
-    <p><i>Category:</i> {{ movie.category }}</p>
-    <p><i>Release year:</i> {{ movie.year }}</p>
-    <p><i>Director:</i> {{ movie.director }}</p>
-    <p style="text-align: justify"><i>Cast:</i> {{ movie.actors }}</p>
-    <p><i>Runtime:</i> {{ movie.runtime }}</p>
-    <p><i>Box office:"</i> {{ movie.box_office }}</p>
-    <p style="text-align: justify"><i>Description:</i> {{ movie.plot }}</p>
-    {% if not is_watched %}
-        <form action="{% url 'save_movie' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="movie" value="{{ movie }}">
-            <input type="submit" value="Add to My list" style="background-color: rgb(95, 133, 177);
-            border: none;
-            color: white;
-            padding: 10px 10px;
-            text-decoration: none;
-            margin: 2px 1px;
-            cursor: pointer;">
-        </form>
-    {% else %}
-        <form action="{% url 'remove_movie' %}" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="movie" value="{{ movie }}">
-            <input type="submit" value="Remove from My list" style="background-color: rgb(95, 133, 177);
-            border: none;
-            color: white;
-            padding: 10px 10px;
-            text-decoration: none;
-            margin: 2px 1px;
-            cursor: pointer;">
-        </form>
-    {% endif %}
-</div>
-</div>
 
+    <div style="margin: 0.5em"><h1>Movie details</h1></div>
+    <div class="details-container" style="display: flex;">
+        <div class="movie-poster" style="width: 35%; padding-left: 7em;">
+            <img src="{{ movie.poster }}" alt="Poster for {{ movie.title }}">
+        </div>
+        <div class="details-text" style="width: 35%">
+            <h2 style="margin-bottom: 1.5em;">{{ movie }}</h2>
+            <p><i>Category:</i> {{ movie.category }}</p>
+            <p><i>Release year:</i> {{ movie.year }}</p>
+            <p><i>Director:</i> {{ movie.director }}</p>
+            <p style="text-align: justify"><i>Cast:</i> {{ movie.actors }}</p>
+            <p><i>Runtime:</i> {{ movie.runtime }}</p>
+            <p><i>Box office:</i> {{ movie.box_office }}</p>
+            <p style="text-align: justify"><i>Description:</i> {{ movie.plot }}</p>
+
+            <div id="rating">
+                <span class="fa fa-star" data-rating="1"></span>
+                <span class="fa fa-star" data-rating="2"></span>
+                <span class="fa fa-star" data-rating="3"></span>
+                <span class="fa fa-star" data-rating="4"></span>
+                <span class="fa fa-star" data-rating="5"></span>
+            </div>
+            {% if rating %}
+                <p><i>Your rating:</i> {{ rating }}</p>
+            {% endif %}
+
+            <br>
+            {% if not is_watched %}
+                <form action="{% url 'save_movie' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="movie" value="{{ movie }}">
+                    <input type="submit" value="Add to My list" style="background-color: rgb(95, 133, 177);
+            border: none;
+            color: white;
+            padding: 10px 10px;
+            text-decoration: none;
+            margin: 2px 1px;
+            cursor: pointer;">
+                </form>
+            {% else %}
+                <form action="{% url 'remove_movie' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="movie" value="{{ movie }}">
+                    <input type="submit" value="Remove from My list" style="background-color: rgb(95, 133, 177);
+            border: none;
+            color: white;
+            padding: 10px 10px;
+            text-decoration: none;
+            margin: 2px 1px;
+            cursor: pointer;">
+                </form>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+
+        const ratingDiv = document.getElementById("rating");
+        const stars = ratingDiv.getElementsByClassName("fa-star");
+
+        {% if rating %}
+            let selectedRating = {{ rating }};
+
+            for (let i = 0; i < stars.length; i++) {
+                if (stars[i].getAttribute("data-rating") <= selectedRating) {
+                    stars[i].classList.add("active");
+                }
+            }
+        {% endif %}
+
+
+        for (let i = 0; i < stars.length; i++) {
+            stars[i].addEventListener("click", function () {
+                for (let j = 0; j < stars.length; j++) {
+                    stars[j].classList.remove("active");
+                }
+                for (let j = 0; j < this.getAttribute("data-rating"); j++) {
+                    stars[j].classList.add("active");
+                }
+                const rating = this.getAttribute("data-rating");
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'rate_movie' %}",
+                    data: {
+                        'rating': rating,
+                        'movie_id': '{{ movie.show }}',
+                        'movie_title': '{{ movie.title }}'
+                    },
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                    },
+                    success: function (response) {
+                        console.log(response);
+                    }
+                });
+                setTimeout(function () {
+                    location.reload();
+                }, 100);
+            });
+        }
+
+    </script>
 {% endblock %}

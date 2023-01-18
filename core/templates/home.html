@@ -18,16 +18,12 @@
 
     {% if movies %}
         <h3>Or check these movies:</h3>
-        <!-- <div class="slidecontainer blur">
-            <input type="range" min="1" max="{{ max_range }}" value="{{ max_range }}//2" class="slider" id="myRange">
-            <div id="slider-value">{{ movies|length }}</div>
-        </div> -->
         <div style="overflow-x: scroll; white-space: nowrap">
         {% for movie in movies %}
             <div style="display: inline-block;">
                 <figure style="text-align: center; text-decoration: none">
                     <a href="{% url 'detail' movie.title %}">
-                        <img src="{{ movie.poster }}" width="150">
+                        <img src="{{ movie.poster }}" width="250">
                     </a>
                     <figcaption style="font-size: 1.25em">{{ movie.title }}</figcaption>
                 </figure>
@@ -36,18 +32,6 @@
         </div>
 
     {% endif %}
-
-    <script>
-        const slider = document.getElementById("myRange");
-
-        let value = document.getElementById("slider-value");
-        slider.addEventListener("input", function () {
-            value.innerHTML = this.value;
-            window.location.href = "{% url 'home' %}?rangee=" + this.value;
-        });
-
-
-    </script>
 
 
 {% endblock %}

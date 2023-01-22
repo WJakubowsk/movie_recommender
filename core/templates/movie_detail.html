@@ -86,7 +86,7 @@
                     url: "{% url 'rate_movie' %}",
                     data: {
                         'rating': rating,
-                        'movie_id': '{{ movie.show }}',
+                        'movie_id': '{{ movie.id }}',
                         'movie_title': '{{ movie.title }}'
                     },
                     beforeSend: function (xhr, settings) {

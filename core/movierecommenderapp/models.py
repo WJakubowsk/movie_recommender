@@ -2,10 +2,10 @@ from django.db import models
 
 from authentication.models import User
 
+
 # Create your models here.
 
 class Show(models.Model):
-    show = models.CharField(max_length=50, unique=True, null=False)
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     year = models.CharField(max_length=50)
@@ -20,14 +20,12 @@ class Show(models.Model):
         return self.title
 
 
-
 class Rating(models.Model):
-    user = models.IntegerField(null=False)
-    show = models.CharField(max_length=50, null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    show = models.ForeignKey(Show, on_delete=models.CASCADE)
     rating = models.IntegerField()
 
 
-# table to connect users and watched shows
 class Watched(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     show = models.ForeignKey(Show, on_delete=models.CASCADE)

@@ -8,11 +8,12 @@
     <div style="overflow-x: scroll; white-space: nowrap;">
         {% for movie in user_movies %}
             <div style="display: inline-block;">
-                <figure style="text-align: center">
-                    <a style="text-decoration:none" href="{% url 'detail' movie.title %}">
-                        <img src="{{ movie.poster }}" alt="{{ movie.title }}" style="width: 200px; height: 300px;">
+                <figure style="text-align: center; text-decoration: none">
+                    <a href="{% url 'detail' movie.title %}">
+                        <img src="{{ movie.poster }}" width="225">
+                    </a>
+                    <figcaption style="font-size: 1.25em">{{ movie.title }}</figcaption>
                 </figure>
-                <figcaption style="font-size: 1.25em; color: black; margin-bottom: 0.5em;">{{ movie.title }}</figcaption>
             </div>
         {% endfor %}
     </div>

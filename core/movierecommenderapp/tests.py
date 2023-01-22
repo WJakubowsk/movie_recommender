@@ -9,7 +9,6 @@ class ViewTest(TestCase):
     def test_search(self):
         # add a show to the database
         Show.objects.create(
-            show='420',
             title='Test Movie',
             category='Test Category',
             year='2020',

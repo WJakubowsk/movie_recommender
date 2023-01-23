@@ -26,3 +26,4 @@ tomli==2.0.1
 trans==2.1.0
 urllib3==1.26.13
 validate-email==1.3
+whitenoise

@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-&y)tf_6oy$h#kx*zgwq!(sjlbqt!ja(f!3@jbcvcch1i8=ix1b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'my-movies-app.azurewebsites.net']
 
 # Application definition
 
@@ -40,10 +40,12 @@ INSTALLED_APPS = [
     'authentication',
     "movierecommenderapp",
     'crispy_forms',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -137,6 +139,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'config/static')]
+STATICFILES_STORAGE = ("whitenoise.storage.CompressedManifestStaticFilesStorage")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

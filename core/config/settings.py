@@ -154,5 +154,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
+CSRF_TRUSTED_ORIGINS=['*']
+
 import sys
 TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'

@@ -18,14 +18,14 @@
 
     {% if movies %}
         <h3>Or check these movies:</h3>
-        <div style="overflow-x: scroll; white-space: nowrap">
+        <div class="scrollable-content" style="overflow-x: scroll; white-space: nowrap">
         {% for movie in movies %}
             <div style="display: inline-block;">
                 <figure style="text-align: center; text-decoration: none">
                     <a href="{% url 'detail' movie.title %}">
                         <img src="{{ movie.poster }}" width="250">
                     </a>
-                    <figcaption style="font-size: 1.25em">{{ movie.title }}</figcaption>
+                    <figcaption style="font-size: 1.25em; margin: 0.75em;">{{ movie.title }}</figcaption>
                 </figure>
             </div>
         {% endfor %}

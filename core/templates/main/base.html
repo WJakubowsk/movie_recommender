@@ -20,7 +20,7 @@
 <nav class="navbar blur">
     <div class="menu">
       <div class="left">
-        <a href="/">MyMovies</a>
+        <a href="/"><b>MyMovies</b></a>
         <a href="{% url 'recommend' %}">Recommendations</a>
       <a href="{% url 'list' %}">My List</a>
 
@@ -36,7 +36,7 @@
       </div>
     </div>
 </nav>
-<div class="blur">
+<div class="blur main">
     {% block content %}
 
     {% endblock content %}

@@ -18,6 +18,7 @@ def main(args):
 
     model = NCFMovieRecommender(num_users, num_items, preprocessor.train, all_movies)
 
+    print('done, training..')
     trainer = pl.Trainer(max_epochs=10)
     trainer.fit(model)
 

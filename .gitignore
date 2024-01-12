@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 #datasets
-data/demo_datasets
+data/*
 
 #env file
 .env

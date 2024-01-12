@@ -30,37 +30,11 @@ class MoviesDatasetPreprocessor():
         self.test = self.df[self.df['rank'] >= 0.8]
         self.train.drop(['timestamp', 'rank'], axis=1, inplace=True)
         self.test.drop(['timestamp', 'rank'], axis=1, inplace=True)
-
-    def generate_positive_negative_observations(self):
-        """
-        Creates positive and negative samples assuming that the user who has 
-        watched the film represents a positive observation and a user who has 
-        not watched the film represents a negative observation.
-        """
-        self.train.loc[:, 'rating'] = 1
-
-        all_movies = ratings['movieId'].unique()
-        self.users, self.items, self.labels = [], [], []
-        user_item_set = set(zip(self.train['userId'], self.train['movieId']))
-        num_negatives = 4
-
-        for (u, i) in tqdm(user_item_set):
-            self.users.append(u)
-            self.items.append(i)
-            self.labels.append(1)
-            for _ in range(num_negatives):
-                negative_item = np.random.choice(all_movieIds) 
-                while (u, negative_item) in user_item_set:
-                    negative_item = np.random.choice(all_movieIds)
-                self.users.append(u)
-                self.items.append(negative_item)
-                self.labels.append(0)
     
     def preprocess_dataset(self):
         self.split_title_column()
         self.split_genres_column()
         self.train_test_split()
-        self.generate_positive_negative_observations()
 
     def save_datasets_to_csv(self, ouptut_dir_path: str):
         self.df.to_csv(ouptut_dir_path + "ratings.csv")

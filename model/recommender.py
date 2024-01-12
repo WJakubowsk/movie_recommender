@@ -1,21 +1,20 @@
-import numpy as np
-import pandas as pd
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 import pytorch_lightning as pl
 from dataset import MovieLensTrainDataset
 
+
 class NCFMovieRecommender(pl.LightningModule):
-    """ Neural Collaborative Filtering (NCF)
-    
-        Args:
-            num_users (int): Number of unique users
-            num_items (int): Number of unique items
-            ratings (pd.DataFrame): Dataframe containing the movie ratings for training
-            all_movies (list): List containing all movieIds (train + test)
+    """Neural Collaborative Filtering (NCF)
+
+    Args:
+        num_users (int): Number of unique users
+        num_items (int): Number of unique items
+        ratings (pd.DataFrame): Dataframe containing the movie ratings for training
+        all_movies (list): List containing all movieIds (train + test)
     """
-    
+
     def __init__(self, num_users, num_items, ratings, all_movies):
         super().__init__()
         self.user_embedding = nn.Embedding(num_embeddings=num_users, embedding_dim=8)
@@ -26,9 +25,8 @@ class NCFMovieRecommender(pl.LightningModule):
         self.ratings = ratings
         self.all_movies = all_movies
         self.save_hyperparameters(logger=False)
-        
+
     def forward(self, user_input, item_input):
-        
         # Pass through embedding layers
         user_embedded = self.user_embedding(user_input)
         item_embedded = self.item_embedding(item_input)
@@ -44,7 +42,7 @@ class NCFMovieRecommender(pl.LightningModule):
         pred = nn.Sigmoid()(self.output(vector))
 
         return pred
-    
+
     def training_step(self, batch, batch_idx):
         user_input, item_input, labels = batch
         predicted_labels = self(user_input, item_input)
@@ -55,5 +53,8 @@ class NCFMovieRecommender(pl.LightningModule):
         return torch.optim.Adam(self.parameters())
 
     def train_dataloader(self):
-        return DataLoader(MovieLensTrainDataset(self.ratings, self.all_movies),
-                          batch_size=512, num_workers=2)
+        return DataLoader(
+            MovieLensTrainDataset(self.ratings, self.all_movies),
+            batch_size=512,
+            num_workers=2,
+        )

@@ -1,10 +1,9 @@
+import argparse
 import pandas as pd
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
 from preprocessor import MoviesDatasetPreprocessor
 from recommender import NCFMovieRecommender
+
 
 def main(args):
     ratings = pd.read_csv(args.data_path)
@@ -12,12 +11,12 @@ def main(args):
     preprocessor = MoviesDatasetPreprocessor(ratings)
     preprocessor.preprocess_dataset()
 
-    num_users = preprocessor.df['userId'].max()+1
-    num_items = preprocessor.df['movieId'].max()+1
+    num_users = preprocessor.df["userId"].max() + 1
+    num_items = preprocessor.df["movieId"].max() + 1
 
-    all_movies = preprocessor.df['movieId'].unique()
+    all_movies = preprocessor.df["movieId"].unique()
 
-    model = NCFMovieRecommender(num_users, num_items, train_ratings, all_movies)
+    model = NCFMovieRecommender(num_users, num_items, preprocessor.train, all_movies)
 
     trainer = pl.Trainer(max_epochs=10)
     trainer.fit(model)
